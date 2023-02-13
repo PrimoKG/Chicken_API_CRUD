@@ -1,0 +1,192 @@
+<!-- Import buttons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css" integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/button.min.css" integrity="sha512-+1Zl+cDrkWiaN4aCOs9XZ12Jm4Lg3OztufLITILSxr3mo5QM3+WgLH6+s+ytIWoWWQcdNlMGn1JHf75TzHvPHA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous">
+</script>
+
+<body>
+
+  <span>
+
+    <!-- Input Fields -->
+
+    <div class="ui center aligned basic segment">
+
+      <div class="ui labeled input">
+        <div class="ui label">
+          Name*
+        </div>
+        <input type="text" placeholder="François" id="inputname">
+      </div>
+
+      <div class="ui labeled input">
+        <div class="ui label">
+          Birthday
+        </div>
+        <input type="date" placeholder="dd-mm-yyyy" id="inputdate">
+      </div>
+
+      <div class="ui labeled input">
+        <div class="ui label">
+          Weight*
+        </div>
+        <input type="number" placeholder="pounds (g)" id="inputweight">
+      </div>
+
+      <div class="ui labeled input">
+        <div class="ui label">
+          Steps
+        </div>
+        <input type="number" placeholder="number..." id="inputsteps">
+      </div>
+
+      <div class="ui labeled input">
+        <div class="ui label">
+          isRunning
+        </div>
+        <input type="number" placeholder="0 : false / 1 : true" id="inputrunning">
+      </div>
+
+      <div class="ui horizontal divider">
+        COMPLETE THIS, THEN
+      </div>
+
+      <div>
+
+        <div class="ui horizontal divider">
+
+          <div class="ui animated button"  onclick="runRequest()">
+            <div class="visible content">RUN</div>
+            <div class="hidden content"> NAME* </div>
+          </div>
+          <div class="ui animated button"  onclick="getRequest()">
+            <div class="visible content">GET</div>
+            <div class="hidden content"> NAME* </div>
+          </div>
+          <div class="ui animated button"  onclick="postRequest()">
+            <div class="visible content">POST</div>
+            <div class="hidden content"> N*, W* </div>
+          </div>
+          <div class="ui animated button" onclick="putRequest()">
+            <div class="visible content">PUT</div>
+            <div class="hidden content"> ID:NAME </div>
+          </div>
+          <div class="ui animated button"  onclick="deleteRequest()">
+            <div class="visible content">DELETE</div>
+            <div class="hidden content"> NAME* </div>
+          </div>
+
+        </div>
+    
+      </div>
+
+    </div>
+
+    <!-- Buttons -->
+
+    
+
+  </span>
+  
+</body>
+
+<script>
+
+  function getRequest() {
+    let param_name = document.getElementById("inputname").value;
+    console.log("VALUE: ", param_name);
+    if (param_name != undefined && param_name !== '') param_name = '?name=' + param_name;
+    else param_name = '';
+    
+    fetch('http://localhost:8000/chicken' + param_name  , {
+      headers: {
+          'Accept': 'application/json'
+      }
+    })
+    .then(response => response.text())
+    .then(text => console.log(text))
+  }
+
+  function postRequest() {
+    let param_name = document.getElementById("inputname").value;
+    let param_date = document.getElementById("inputdate").value;
+    let param_weight = document.getElementById("inputweight").value;
+    let param_steps = document.getElementById("inputsteps").value;
+    let param_isrunning = document.getElementById("inputrunning").value;
+
+    fetch('http://localhost:8000/chicken'  , {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: param_name, birthday: param_date, weight: param_weight, 
+        steps: param_steps, isRunning: param_isrunning
+      })
+    })
+    .then(response => response.text())
+    .then(text => console.log(text))
+  }
+
+  function putRequest() {
+
+    let param_name = document.getElementById("inputname").value;
+    let param_date = document.getElementById("inputdate").value;
+    let param_weight = document.getElementById("inputweight").value;
+    let param_steps = document.getElementById("inputsteps").value;
+    let param_isrunning = document.getElementById("inputrunning").value;
+
+    fetch('http://localhost:8000/chicken'  , {
+      method: 'PUT',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: param_name, birthday: param_date, weight: param_weight, 
+        steps: param_steps, isRunning: param_isrunning
+      })
+    })
+    .then(response => response.text())
+    .then(text => console.log(text))
+  }
+
+  function deleteRequest() {
+
+    let param_name = document.getElementById("inputname").value;
+    console.log("VALUE: ", param_name);
+    if (param_name != undefined && param_name !== '') param_name = '?name=' + param_name;
+    else param_name = '';
+    
+    fetch('http://localhost:8000/chicken' + param_name  , {
+      method: 'DELETE',
+      headers: {
+          'Accept': 'application/json'
+      }
+    })
+    .then(response => response.text())
+    .then(text => console.log(text))
+  }
+
+  function runRequest() {
+
+    let param_name = document.getElementById("inputname").value;
+
+    fetch('http://localhost:8000/chicken/run/'  , {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: param_name
+      })
+    })
+    .then(response => response.text())
+    .then(text => console.log(text))
+  }
+</script>
